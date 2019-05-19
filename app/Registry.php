@@ -18,7 +18,7 @@ class Registry extends Model
     ];
 
     protected $casts = [
-        'when' => 'datetime',
+        'when' => 'datetime:d/m/y H:i', // 05/12/18 01:00
         'O3' => 'float',
         'NO' => 'float',
         'NO2' => 'float',
@@ -28,4 +28,5 @@ class Registry extends Model
         'PM25' => 'float',
     ];
 
+    
 }

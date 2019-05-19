@@ -6,6 +6,11 @@ use App\Registry;
 use Illuminate\Http\Request;
 use App\Imports\RegistryImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\RegistryRequest;
+use App\Http\Resources\RegistryResource;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class RegistryController extends Controller
 {
@@ -16,20 +21,41 @@ class RegistryController extends Controller
      */
     public function index(Request $request)
     {
-        $registries = Registry::get();
-
-        
-        return response()->json([
-            "data" => $registries
-        ]);
+        // $registries = Registry::get();
+        $registries = \DB::table('registries')
+            ->selectRaw("AVG(NO) NO, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly, `when`, O3, NO2, NOx, CO, SO2, PM25")
+            ->groupBy("hourly")
+            ->get();
+        // dd($registries);
+        return RegistryResource::collection($registries);
+        // return response()->json([
+        //     "data" => $registries
+        // ]);
     }
 
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
         
-        Excel::import(new RegistryImport,$request->file('excel'));
+        // dd($request->all());
+        
+        $data = $this->validate($request, [
+            'file' => [
+                "file"
+            ]
+        ]);
+        $file = $data['file'];
+        $fileName = $file->getClientOriginalName()."_".time().'.'.$file->getClientOriginalExtension();
 
-        dd(Registry::count());
-        dd($request->file('excel'));
+        $file->storeAs('reports', $fileName);
+        // foreach($data['file'] as $file) {
+        Excel::import(new RegistryImport, $file);
+        // }
+
+        return response([
+            "data" => [
+                "total" => Registry::count()
+            ]
+        ]);
     }
 
     /**
@@ -38,48 +64,22 @@ class RegistryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegistryRequest $request)
     {
-        $request->pm25 = $request->get('PM2.5');
-        $data = $this->validate($request, [
-            'when' => 'required|date',
-            'O3' => 'required',
-            'NO' => 'required',
-            'NO2' => 'required',
-            'NOx' => 'required',
-            'CO' => 'required',
-            'SO2' => 'required',
-            'PM25' => 'required'
+        $data = $request->toArray();
+        $data['when'] = Carbon::createFromFormat("d/m/y H:i", $data['when'])->toDateTimeString();
+
+        $validator = Validator::make($data, [
+            'when' => 'unique:registries,when'
         ]);
+        if($validator->fails()){
+            return response(['message' => 'Registro Existente'], 422);
+        }
 
         $registry = Registry::create($data);
         
-        return response()->json([
-            "data" => $registry->toArray()
-        ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Registry  $registry
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Registry $registry)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Registry  $registry
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Registry $registry)
-    {
-        //
+        // dump($registry,"aaaaaaaaaaa");
+        return  RegistryResource::make($registry->fresh());
     }
 
     /**
