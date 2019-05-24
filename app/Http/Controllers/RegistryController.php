@@ -21,6 +21,7 @@ class RegistryController extends Controller
      */
     public function index(Request $request)
     {
+        // test
         // $registries = Registry::get();
         $registries = \DB::table('registries')
             ->selectRaw("AVG(NO) NO, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly, `when`, O3, NO2, NOx, CO, SO2, PM25")
