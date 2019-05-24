@@ -27,17 +27,20 @@
             smooth
             >
         </trend>
+        <tacometro></tacometro>
     </div>
 </template>
 
 <script>
 import Trend from "vuetrend";
 import axios from "axios";
+import Tacometro from "@/components/Tacometro.vue"
 
 export default {
     name: "home",
     components:{
-        Trend
+        Trend,
+        Tacometro
     },
     data () {
       return {
