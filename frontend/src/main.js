@@ -11,13 +11,11 @@ import ECharts from 'vue-echarts/components/ECharts'
 // import ECharts modules manually to reduce bundle size
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/tooltip'
-
+require("dotenv").config();
 // register component to use
 Vue.component('chart', ECharts)
 
 Vue.config.productionTip = false;
-
-
 
 new Vue({
     router,

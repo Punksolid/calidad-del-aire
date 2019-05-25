@@ -6,7 +6,7 @@
                 <el-upload
                     class="upload-demo"
                     drag
-                    action="http://localhost:8000/api/v1/registries/upload"
+                    :action="upload_url"
                     
                     :file-list="fileList"
                     multiple>
@@ -28,6 +28,7 @@ export default {
     name: "upload_excel",
     data() {
         return {
+            upload_url:process.env.VUE_APP_BACKEND_URL + "/api/v1/registries/upload",
             form: {
                 excel : null
             },

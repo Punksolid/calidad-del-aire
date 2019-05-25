@@ -96,8 +96,9 @@ export default {
                     break;
             }
         },
-        getRegistries() {
-            axios.get('http://localhost:8000/api/v1/registries')
+        getRegistries() { 
+            // http://localhost:8000
+            axios.get( process.env.VUE_APP_BACKEND_URL + '/api/v1/registries')
                 .then(response => {
                     this.datacollection = response.data.data
                     this.co = response.data.data.map(function(reg){
