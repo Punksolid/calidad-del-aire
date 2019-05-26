@@ -18,9 +18,5 @@ export default {
             tachometer: []
         }
     },
-}
+};
 </script>
-
-<style>
-
-</style>

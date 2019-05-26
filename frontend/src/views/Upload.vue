@@ -41,10 +41,6 @@ export default {
         onSubmit() {
             console.log(this.form)
         }
-    },
-}
+    }
+};
 </script>
-
-<style>
-
-</style>

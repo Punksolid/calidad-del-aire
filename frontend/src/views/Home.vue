@@ -17,8 +17,7 @@
           <el-option v-for="indicator in indicators" 
           :key="indicator.value"
           :label="indicator.name"
-          :value="indicator.value"
-          ></el-option>
+          :value="indicator.value"/>
         </el-select>
         <trend
             :data="datacollection"
@@ -34,11 +33,11 @@
 <script>
 import Trend from "vuetrend";
 import axios from "axios";
-import Tacometro from "@/components/Tacometro.vue"
+import Tacometro from "@/components/Tacometro.vue";
 
 export default {
     name: "home",
-    components:{
+    components: {
         Trend,
         Tacometro
     },
@@ -96,37 +95,34 @@ export default {
                     break;
             }
         },
-        getRegistries() { 
-            // http://localhost:8000
+        getRegistries(){ 
             axios.get( process.env.VUE_APP_BACKEND_URL + '/api/v1/registries')
                 .then(response => {
-                    this.datacollection = response.data.data
-                    this.co = response.data.data.map(function(reg){
-                        return reg.CO
-                    })
-                    this.no = response.data.data.map(function(reg){
-                        return reg.NO
-                    })
-                    this.o3 = response.data.data.map(function(reg){
-                        return reg.O3
-                    })
-                    this.nox = response.data.data.map(function(reg){
-                        return reg.NOx
-                    })
-                    this.so2 = response.data.data.map(function(reg){
-                        return reg.SO2
-                    })
-                    this.pm25 = response.data.data.map(function(reg){
-                        return reg.PM25
-                    })
+                    this.datacollection = response.data.data;
+                    this.co = response.data.data.map(function(reg) {
+                        return reg.CO;
+                    });
+                    this.no = response.data.data.map(function(reg) {
+                        return reg.NO;
+                    });
+                    this.o3 = response.data.data.map(function(reg) {
+                        return reg.O3;
+                    });
+                    this.nox = response.data.data.map(function(reg) {
+                        return reg.NOx;
+                    });
+                    this.so2 = response.data.data.map(function(reg) {
+                        return reg.SO2;
+                    });
+                    this.pm25 = response.data.data.map(function(reg) {
+                        return reg.PM25;
+                    });
                     // return response.data.data;
-                })
+                });
         }
     },
     mounted() {
-        this.getRegistries()
+        this.getRegistries();
     }
 };
-
-
 </script>
