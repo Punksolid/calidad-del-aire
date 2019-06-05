@@ -5,7 +5,7 @@ import store from "./store";
 import "./registerServiceWorker";
 import "./plugins/element";
 import "./assets/tailwind.css";
-// import 'echarts/lib/echarts'
+import 'echarts/lib/echarts'
 
 import ECharts from "vue-echarts/components/ECharts";
 // import ECharts modules manually to reduce bundle size
