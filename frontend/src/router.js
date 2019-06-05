@@ -10,7 +10,21 @@ export default new Router({
         {
             path: "/",
             name: "home",
-            component: Home
+            component: Home,
+            title: "Calidad del Aire",
+            meta: {
+                title: 'Calidad Del Aire - Culiacán',
+                metaTags: [
+                    {
+                        name: 'description',
+                        content: 'Indicadores de la calidad del aire de la Ciudad de Culiacán, Sinaloa.'
+                    },
+                    {
+                        property: 'og:description',
+                        content: 'Indicadores de la calidad del aire de la Ciudad de Culiacán, Sinaloa.'
+                    }
+                ]
+            }
         },
         {
             path: "/upload",
