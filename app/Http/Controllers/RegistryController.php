@@ -22,11 +22,18 @@ class RegistryController extends Controller
     public function index(Request $request)
     {
         // test
+        $start_date = now()->subDays(60);
+        $right_now = now();
         // $registries = Registry::get();
         $registries = \DB::table('registries')
             ->selectRaw("AVG(NO) NO, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly, `when`, O3, NO2, NOx, CO, SO2, PM25")
-            ->groupBy("hourly")
+            ->groupBy('hourly')
+            // ->where('when', '>', $start_date->toDateTimeString())
+            // ->where('when', '<', $right_now->toDateTimeString())
             ->get();
+        // $registries = Registry::where('when', '>', $start_date->toDateTimeString())
+        //     ->where('when', '<', $right_now->toDateTimeString())
+        //     ->get();
         // dd($registries);
         return RegistryResource::collection($registries);
         // return response()->json([
@@ -36,49 +43,49 @@ class RegistryController extends Controller
 
     public function upload(Request $request)
     {
-        
         // dd($request->all());
-        
+
         $data = $this->validate($request, [
             'file' => [
-                "file"
-            ]
+                'file',
+            ],
         ]);
         $file = $data['file'];
-        $fileName = $file->getClientOriginalName()."_".time().'.'.$file->getClientOriginalExtension();
+        $fileName = $file->getClientOriginalName().'_'.time().'.'.$file->getClientOriginalExtension();
 
         $file->storeAs('reports', $fileName);
         // foreach($data['file'] as $file) {
-        Excel::import(new RegistryImport, $file);
+        Excel::import(new RegistryImport(), $file);
         // }
 
         return response([
-            "data" => [
-                "total" => Registry::count()
-            ]
+            'data' => [
+                'total' => Registry::count(),
+            ],
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(RegistryRequest $request)
     {
         $data = $request->toArray();
-        $data['when'] = Carbon::createFromFormat("d/m/y H:i", $data['when'])->toDateTimeString();
+        $data['when'] = Carbon::createFromFormat('d/m/y H:i', $data['when'])->toDateTimeString();
 
         $validator = Validator::make($data, [
-            'when' => 'unique:registries,when'
+            'when' => 'unique:registries,when',
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['message' => 'Registro Existente'], 422);
         }
 
         $registry = Registry::create($data);
-        
+
         // dump($registry,"aaaaaaaaaaa");
         return  RegistryResource::make($registry->fresh());
     }
@@ -86,11 +93,11 @@ class RegistryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Registry  $registry
+     * @param \App\Registry $registry
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Registry $registry)
     {
-        //
     }
 }
