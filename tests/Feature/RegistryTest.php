@@ -62,7 +62,30 @@ class RegistryTest extends TestCase
     public function usuario_puede_ver_listado_de_registros()
     {
         $call = $this->getJson('api/v1/registries');
-        $call->dump();
+        $call->assertJsonStructure([
+            "data" => [
+                "*" => [
+                    'when',
+                    'O3',
+                    'NO',
+                    'NO2',
+                    'NOx',
+                    'CO',
+                    'SO2',
+                    'PM25'
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function usuario_puede_buscar_registro_por_intervalo_de_fechas()
+    {
+        $start_date = now()->subDays(10)->toDateTimeString();
+        $end_date = now()->subDays(5)->toDateTimeString();
+        $call = $this->getJson("api/v1/registries?start_date=$start_date&end_date=$end_date");
         $call->assertJsonStructure([
             "data" => [
                 "*" => [

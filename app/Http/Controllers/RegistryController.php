@@ -9,8 +9,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\RegistryRequest;
 use App\Http\Resources\RegistryResource;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class RegistryController extends Controller
 {
@@ -21,19 +21,30 @@ class RegistryController extends Controller
      */
     public function index(Request $request)
     {
-        // test
-        $start_date = now()->subDays(60);
-        $right_now = now();
-        // $registries = Registry::get();
-        $registries = \DB::table('registries')
-            ->selectRaw("AVG(NO) NO, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly, `when`, O3, NO2, NOx, CO, SO2, PM25")
-            ->groupBy('hourly')
-            // ->where('when', '>', $start_date->toDateTimeString())
-            // ->where('when', '<', $right_now->toDateTimeString())
-            ->get();
-        // $registries = Registry::where('when', '>', $start_date->toDateTimeString())
+        $request->validate([
+            'start_date' => 'date',
+            'end_date' => 'date|after:start_date',
+        ]);
+        if ($request->filled('start_date')) {
+            $start_date = Carbon::make($request->start_date);
+        } else {
+            $start_date = now()->subDays(3);
+        }
+        if ($request->filled('end_date')) {
+            $end_date = Carbon::make($request->end_date);
+        } else {
+            $end_date = now();
+        }
+        // $registries = \DB::table('registries')
+        //     ->selectRaw("AVG(NO) NO, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly, `when`, O3, NO2, NOx, CO, SO2, PM25")
+        //     ->groupBy('hourly')
+        //     ->where('when', '>', $start_date->toDateTimeString())
         //     ->where('when', '<', $right_now->toDateTimeString())
+        //     ->orderBy('when')
         //     ->get();
+        $registries = Registry::where('when', '>', $start_date->toDateTimeString())
+            ->where('when', '<', $end_date->toDateTimeString())
+            ->get();
         // dd($registries);
         return RegistryResource::collection($registries);
         // return response()->json([
@@ -45,7 +56,8 @@ class RegistryController extends Controller
     {
         // dd($request->all());
 
-        $data = $this->validate($request, [
+        $data = $request->validate([
+            'password' => "required|in:1234567890",
             'file' => [
                 'file',
             ],

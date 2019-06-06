@@ -16,7 +16,7 @@ class RegistryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "when" => $this->when,
+            "when" => $this->when->format("d/m/y H:i"),
             "O3" => (double)$this->O3,
             "NO" => (double)$this->NO,
             "NO2" => (double)$this->NO2,

@@ -26,7 +26,6 @@ class RegistryRequest extends FormRequest
     public function rules()
     {
         return [
-            'password' => "required|in:1234567890.",
             'when' => [
                 "required",
                 "date_format:d/m/y H:i"
