@@ -5,15 +5,14 @@ import Upload from "./views/Upload.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: "/",
             name: "home",
             component: Home,
-            title: "Calidad del Aire",
             meta: {
-                title: 'Calidad Del Aire - Culiacán',
+                title: 'Calidad del Aire - Culiacán',
                 metaTags: [
                     {
                         name: 'description',
@@ -41,4 +40,10 @@ export default new Router({
                 import(/* webpackChunkName: "about" */ "./views/About.vue")
         }
     ]
+});
+export default router
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title || 'Calidad del Aire - Culiacán'
+    next()
 });
