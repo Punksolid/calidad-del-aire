@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Upload from "./views/Upload.vue";
+import DataQuality from "./views/DataQuality.vue"
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ const router = new Router({
             path: "/upload",
             name: "upload",
             component: Upload
+        },
+        {
+            path: "/data_quality",
+            name: "data_quality",
+            component: DataQuality
         },
         {
             path: "/about",

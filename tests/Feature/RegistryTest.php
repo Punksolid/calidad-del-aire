@@ -4,16 +4,13 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\User;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Monolog\Registry;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RegistryTest extends TestCase
 {
     use WithFaker;
+
     /**
      * @test
      */
@@ -28,12 +25,12 @@ class RegistryTest extends TestCase
             'NOx' => 22.7,
             'CO' => 4.4,
             'SO2' => 1.8,
-            'PM25' => 10.1
+            'PM25' => 10.1,
         ];
         // dd($data);
         $call = $this->postJson('api/v1/registries', $data);
         $call->assertJson([
-            "data" =>  $data
+            'data' => $data,
         ]);
     }
 
@@ -50,7 +47,7 @@ class RegistryTest extends TestCase
             'NOx' => 22.7,
             'CO' => 4.4,
             'SO2' => 1.8,
-            'PM25' => 10.1
+            'PM25' => 10.1,
         ];
         $call = $this->postJson('api/v1/registries', $data);
         $call->assertStatus(422);
@@ -63,8 +60,8 @@ class RegistryTest extends TestCase
     {
         $call = $this->getJson('api/v1/registries');
         $call->assertJsonStructure([
-            "data" => [
-                "*" => [
+            'data' => [
+                '*' => [
                     'when',
                     'O3',
                     'NO',
@@ -72,9 +69,9 @@ class RegistryTest extends TestCase
                     'NOx',
                     'CO',
                     'SO2',
-                    'PM25'
-                ]
-            ]
+                    'PM25',
+                ],
+            ],
         ]);
     }
 
@@ -87,8 +84,8 @@ class RegistryTest extends TestCase
         $end_date = now()->subDays(5)->toDateTimeString();
         $call = $this->getJson("api/v1/registries?start_date=$start_date&end_date=$end_date");
         $call->assertJsonStructure([
-            "data" => [
-                "*" => [
+            'data' => [
+                '*' => [
                     'when',
                     'O3',
                     'NO',
@@ -96,9 +93,9 @@ class RegistryTest extends TestCase
                     'NOx',
                     'CO',
                     'SO2',
-                    'PM25'
-                ]
-            ]
+                    'PM25',
+                ],
+            ],
         ]);
     }
 
@@ -112,12 +109,31 @@ class RegistryTest extends TestCase
         ->selectRaw("AVG(NO) averageO3, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly")
         // ->select(\DB::raw('*, HOUR(when) as hour'))
         ->selectRaw("AVG(NO) averageO3, DATE_FORMAT(`when`,'%Y-%m-%d %H') hourly")
-        ->groupBy("hourly")
+        ->groupBy('hourly')
         // ->groupBy(\DB::raw("DATE_FORMAT(`when`, '%Y-%m-%d %H')"))
                     // ->take(10)
                     ->get();
 
         dd($registries);
         $this->assertEquals(48, $registries->count());
+    }
+
+    /**
+     * @test
+     */
+    public function usuario_puede_ver_el_numero_de_registros_por_dia()
+    {
+        $call = $this->getJson("api/v1/uploaded_resume");
+        
+        $call->assertJsonStructure([
+            "data" => [
+                "*" => [
+                    "registros",
+                    "day"
+                ]
+            ]
+        ]);
+
+        $call->assertSee("2019");
     }
 }
