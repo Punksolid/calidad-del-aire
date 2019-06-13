@@ -1,72 +1,70 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+## Endpoints
+La app tiene algunos endpoints de consumo básico como.
+# Lectura de registros de minuto a minuto.
+`https://api.calidaddelaire.org.mx/api/v1/registries`
+Por default devuelve los ultimos tres días aceptando los parametros
+`?start_date=2018/11/30%2000:00:01&end_date=2019/01/30%2000:00:01`
+start_date y end_date donde ambos campos son date time. Si el array viene vacío es que no hay datos.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+#Calidad de datos
+Este enpoint lista los días y la cantidad de registros de ese día del año en curso
+`https://api.calidaddelaire.org.mx/api/v1/uploaded_resume?year=2019`
+donde el query param de `year` es el año que se quiere revisar. Si revisan el año 2018 pueden ver los unicos dos días ya precargados. Cada día devería mostrar una cantidad de 1440 registros que son los minutos que hay en un día. 
+##
 
-## About Laravel
+## Instalar en local
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```
+git clone https://github.com/Punksolid/calidad-del-aire.git
+cd calidad-del-aire
+composer update
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```
+el siguiente paso es configurar una base de datos mysql por ejemplo `calidad_del_aire_db`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+luego entrar al archivo .env del root y configurar los keys que comienzan con `DB_`
 
-## Learning Laravel
+el siguiente paso es recrear la base de datos corriendo las migraciones
+```
+php artisan migrate
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Los pasos anteriores son los necesarios para correr el backend, si todo está correcto ya podrían correr los test unitarios desde el root con
+```
+/vendor/bin/phpunit
+```
+Si todo está bien serán todas las pruebas pasadas.
+El ultimo paso para dejar activo el servidor de pruebas es correr 
+```
+php artisan serve
+```
+El cual correrá un servidor provisional en `http://localhost:8000`
+La segunda parte es correr el frontend. El frontend es una aplicación completamente separada que está copiada en el mismo repositorio que en el backend bajo el directorio `/frontend` 
+para instalarlo es necesario lo siguiente
+```
+cd /frontend
+npm update
+npm run watch 
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1400 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+el directorio frontend debe tener a su vez un archivo `.env` con el siguiente valor
+```
+VUE_APP_BACKEND_URL=http://localhost:8000
 
-## Laravel Sponsors
+```
+donde la url puede apuntar a su localhost o directamente al backend que está montado en estos momentos. `https://api.calidaddelaire.org.mx`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+Si todo está bien podrían correr el servidor en localhost y subir los archivos reales de pruebas otorgados por el Gobierno del Estado de Sinaloa, que se encuentran en el directorio
+`/storage/app/aire_culiacan.xls`
 
 ## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Revisa por favor si puedes contribuir primero con los issues solicitados en el apartado de issues del [repositorio en github](https://github.com/Punksolid/calidad-del-aire/labels/help%20wanted)
+Considera contribuir al proyecto de cualquier forma. Un buen inicio es la documentación o agregando tu username de twitter o github en este documento. Las modificaciones son aceptadas por pull request en el siguiente repositorio. [Calidad del Aire](https://github.com/punksolid/calidad-del-aire).
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Si descubres alguna falla de seguridad favor de twittear a punksolid @ twitter
 
-## License
+## Tecnologias
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+PHP Javascript Laravel Vuejs
