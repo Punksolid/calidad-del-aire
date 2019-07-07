@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <Slide />
-        <el-row :gutter="15">
+        <Slide/>
+        <el-row :gutter="15" class="p-5">
             <el-col :xs="24" :sm="5" class="mb-5">
                 <div class="bg-gray-400 p-2 rounded mb-2">
                     <h4>Selecciona un elemento:</h4>
@@ -63,7 +63,6 @@
                     </div>
                 </div>
             </el-col>
-
             <el-col :xs="24" :sm="4">
                 <tacometro />
             </el-col>

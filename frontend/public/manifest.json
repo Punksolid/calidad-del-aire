@@ -1,5 +1,5 @@
 {
-  "name": "Calidad del Aire Culiacán",
+  "name": "Calidad del Aire",
   "short_name": "Calidad del Aire",
   "icons": [
     {
@@ -16,5 +16,5 @@
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#4B648C"
+  "theme_color": "#24447b"
 }

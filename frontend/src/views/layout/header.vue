@@ -8,13 +8,13 @@
                     alt="Calidad del Aire Logo"
                 />
             </el-col>
-            <el-col :sm="12" :md="19" class="menu_wrapper text-right">
+            <el-col :sm="12" :md="19" class="menu_wrapper sm:text-right">
                 <el-menu
                     mode="horizontal"
                     background-color="#24447b"
                     text-color="#b4cffe"
                     active-text-color="#FFF"
-                    class="float-right">
+                    class="sm:float-right flex align-center justify-center">
                     <el-menu-item index="1">
                         <router-link to="/">INICIO</router-link>
                     </el-menu-item>
