@@ -5,6 +5,7 @@ import store from "./store";
 import "./registerServiceWorker";
 import "./plugins/element";
 import "./assets/tailwind.css";
+import "./assets/css/all.css"; /* FontAwesome 5 */
 import "echarts/lib/echarts";
 
 import ECharts from "vue-echarts/components/ECharts";

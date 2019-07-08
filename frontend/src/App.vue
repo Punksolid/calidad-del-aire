@@ -1,7 +1,7 @@
 <template>
     <el-container direction="vertical" class="h-screen">
         <topheader />
-        <el-main class="content p-0 overflow-x-hidden">
+        <el-main class="p-0 overflow-x-hidden">
             <transition name="fade" mode="out-in">
                 <router-view class="content_wrapper" />
             </transition>
@@ -31,11 +31,6 @@ body {
     transform-style: preserve-3d;
     overflow-x: hidden;
     overflow-y: auto;
-}
-.content {
-    display: flex;
-    flex-direction: column;
-    background: #FFF;
 }
 .content_wrapper {
     z-index: 20;

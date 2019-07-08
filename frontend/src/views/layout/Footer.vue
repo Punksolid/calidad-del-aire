@@ -12,6 +12,24 @@
             </div>
             <div class="right-side p-5 flex-1 text-center font-bold">
                 <h2>Siguenos en:</h2>
+                <div class="redessociales text-lg mt-5">
+                    <a href="#">
+                    <span class="fa-stack">
+                      <i class="fab fa-facebook fa-2x text-white"></i>
+                    </span>
+                    </a>
+                    <a href="#">
+                    <span class="fa-stack">
+                      <i class="fas fa-circle fa-stack-2x"></i>
+                      <i class="fab fa-twitter fa-stack-1x text-blue-800"></i>
+                    </span>
+                    </a>
+                    <a href="#">
+                    <span class="fa-stack">
+                        <i class="fab fa-github fa-2x text-white"></i>
+                    </span>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="copyright text-center py-4">
