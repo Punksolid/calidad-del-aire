@@ -1,36 +1,41 @@
 <template>
-  <div>
     <el-container direction="vertical" class="h-screen">
-      <topheader/>
-      <el-main>
-        <transition name="fade" mode="out-in">
-          <router-view/>
-        </transition>
+        <topheader />
+        <el-main class="p-0 overflow-x-hidden">
+            <transition name="fade" mode="out-in">
+                <router-view class="content_wrapper" />
+            </transition>
+            <Footer/>
         </el-main>
-      <el-footer id="Footer" class="text-white text-xs flex items-center justify-center" height="30px">
-        <div><p>Calidad del Aire © 2019 - Todos los derechos reservados</p></div>
-      </el-footer>
     </el-container>
-  </div>
 </template>
 
 <script>
 import topheader from "./views/layout/header";
+import Footer from "./views/layout/Footer";
 export default {
-  name: 'app',
-  components: {
-    topheader
-  }
-}
+    name: "app",
+    components: {
+        Footer,
+        topheader
+    }
+};
 </script>
 
 <style>
-#app {
+html {
+    overflow: hidden;
+}
+body {
+    perspective: 1px;
+    transform-style: preserve-3d;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.content_wrapper {
+    z-index: 20;
 }
 .el-menu--horizontal > .el-menu-item {
-  display: flex;
+    display: flex;
 }
- #Footer {
-   background: #8DA1C5;
- }
 </style>
