@@ -28,3 +28,6 @@ Route::get('v1/imecas/bioxido_de_nitrogeno', 'ImecasController@bioxidoDeNitrogen
 
 // });
 Route::get('v1/uploaded_resume', 'AuditInfoController@getUploadedResume');
+
+
+Route::resource('v1/estaciones', 'EstacionesController');
