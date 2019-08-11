@@ -15,14 +15,17 @@ class CreateRegistriesTable extends Migration
     {
         Schema::create('registries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->dateTime('when'); 
-            $table->decimal('O3'); 
-            $table->decimal('NO'); 
-            $table->decimal('NO2'); 
-            $table->decimal('NOx'); 
-            $table->decimal('CO'); 
-            $table->decimal('SO2'); 
-            $table->decimal('PM25'); 
+            $table->unsignedBigInteger('station_id');
+            $table->dateTime('when');
+            $table->dateTimeTz('date');
+            $table->decimal('O3', 8, 6)->nullable();
+            $table->decimal('NO', 8, 6)->nullable();
+            $table->decimal('NO2', 8, 6)->nullable();
+            $table->decimal('NOx', 8, 6)->nullable();
+            $table->decimal('CO', 8, 6)->nullable();
+            $table->decimal('SO2', 8, 6)->nullable();
+            $table->decimal('PM25', 8, 6)->nullable();
+            $table->decimal('PM10', 8, 6)->nullable();
             $table->timestamps();
         });
     }

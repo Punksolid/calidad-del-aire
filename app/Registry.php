@@ -15,17 +15,21 @@ class Registry extends Model
         'CO', // ppm
         'SO2', // ppb
         'PM25', // ug/m3
+        'PM10', // ug/m3
+        'date',
+        'station_id'
     ];
 
     protected $casts = [
         'when' => 'datetime:d/m/y H:i', // 05/12/18 01:00
-        'O3' => 'float',
-        'NO' => 'float',
-        'NO2' => 'float',
-        'NOx' => 'float',
-        'CO' => 'float',
-        'SO2' => 'float',
-        'PM25' => 'float',
+//        'O3' => 'decimal',
+//        'NO' => 'decimal',
+//        'NO2' => 'decimal',
+//        'NOx' => 'decimal',
+////        'CO' => 'decimal',
+//        'SO2' => 'decimal',
+//        'PM25' => 'decimal',
+        'station_id' => 'integer'
     ];
 
     public function convertToPpm($particle)
