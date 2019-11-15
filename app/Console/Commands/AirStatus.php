@@ -41,7 +41,9 @@ class AirStatus extends Command
         $client = HttpClient::create();
         $response = $client->request('GET', "http://app.respira.org.mx/ws/get-monitor-data.php?idmonitor=A0034&idparam=PM25&interval=month&datetime1=2000-01-01%2000%3A00%3A00&datetime2=5000-01-01%2023%3A00%3A00&timeoffset=-7");
         $response = json_decode($response->getContent());
-        $val_aqi = $response[0]->val_aqi;
+
+        $response = $response[0];
+        $val_aqi = $response->{2};
         $status = $this->getStatus($val_aqi);
 
         $client->request('POST', env('BOT_WEBHOOK'), [
