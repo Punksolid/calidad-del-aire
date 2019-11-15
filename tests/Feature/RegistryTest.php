@@ -29,6 +29,7 @@ class RegistryTest extends TestCase
         ];
         // dd($data);
         $call = $this->postJson('api/v1/registries', $data);
+        $call->dump();
         $call->assertJson([
             'data' => $data,
         ]);
@@ -59,6 +60,8 @@ class RegistryTest extends TestCase
     public function usuario_puede_ver_listado_de_registros()
     {
         $call = $this->getJson('api/v1/registries');
+
+
         $call->assertJsonStructure([
             'data' => [
                 '*' => [
@@ -124,7 +127,7 @@ class RegistryTest extends TestCase
     public function usuario_puede_ver_el_numero_de_registros_por_dia()
     {
         $call = $this->getJson("api/v1/uploaded_resume");
-        
+
         $call->assertJsonStructure([
             "data" => [
                 "*" => [

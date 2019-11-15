@@ -63,14 +63,14 @@ class EstacionesTest extends TestCase
 
     public function test_importar_registros()
     {
-        // se quedó en la pagina 382
+        // se quedó en la pagina 447
         dump(Registry::count());
         DB::disableQueryLog();
         $httpClient = HttpClient::create();
         $time = now();
         $pageSize = 10000;
         $station_id = 101;
-        $page = 1;
+        $page = 447;
         $response = $httpClient->request(
             'GET',
             "https://api.datos.gob.mx/v2/sinaica?page=$page&pageSize=$pageSize"
@@ -79,7 +79,7 @@ class EstacionesTest extends TestCase
         $total_of_pages = $total_registries / $pageSize;
         $total_of_pages = round($total_of_pages);
         dump("Total pages: ". $total_of_pages);
-        for ($page = 1; $page <= $total_of_pages + 1; $page++) {
+        for ($page = 447; $page <= $total_of_pages + 1; $page++) {
             dump('Page: '. $page);
             $tiempo_del_request = now();
             $response = $httpClient
