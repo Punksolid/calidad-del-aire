@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\HttpClient\HttpClient;
+use Twilio\Rest\Client;
 
 class AirStatus extends Command
 {
@@ -53,6 +54,8 @@ class AirStatus extends Command
             ]
         ]);
 
+        $this->sendWhatsapp(null, $this->getMessage($val_aqi));
+
         $this->info('normal');
     }
 
@@ -101,5 +104,23 @@ class AirStatus extends Command
         if ($aqi >= 301) {
             return 'La calidad del aire de Culiacán es salvese quien pueda.';
         }
+    }
+
+    public function sendWhatsapp($to, $message )
+    {
+        $sid = env('TWILIO_ACCOUNT_SID');
+        $token = env('TWILIO_AUTH_TOKEN');
+        $client = new Client($sid, $token);
+
+        $message = $client->messages
+            ->create("whatsapp:+5216672067464", // to
+                array(
+                    "from" => "whatsapp:+14155238886",
+                    "body" => $message
+                )
+            );
+
+        print($message->sid);
+
     }
 }

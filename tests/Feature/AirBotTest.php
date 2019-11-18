@@ -19,4 +19,10 @@ class AirBotTest extends TestCase
             ->expectsOutput('normal');
 
     }
+
+    public function test_send_whatsapp_message()
+    {
+        $this->artisan('air:status')
+            ->expectsOutput('normal');
+    }
 }
