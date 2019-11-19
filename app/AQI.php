@@ -7,6 +7,10 @@ namespace App;
 class AQI
 {
 
+    /**
+     * @param array $points recent in index 0 and then to index 12
+     * @return float|int
+     */
     public static function nowCast(array $points)
     {
         $points_without_nulls = array_filter($points);
@@ -35,7 +39,6 @@ class AQI
 
             $product_sum += $point*pow($weight_factor,$exponential);
             $sum_of_weight_factors += pow($weight_factor,$exponential);
-            dump("product sum " . $product_sum);
 
             $exponential++;
         }
@@ -101,7 +104,7 @@ class AQI
         throw new \Exception('Pollutant unknown');
     }
 
-    public static function getAqiOfPM25($concentration) {
+    public static function getAqiOfPM25(float $concentration) {
         $C1 = 0.0;
         $C2 = 0.0;
         $I1 = 0.0;

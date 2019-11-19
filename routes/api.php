@@ -44,13 +44,4 @@ Route::post(
     }
 );
 
-Route::post(
-    'v1/callback/inbound',
-    function () {
-
-        $message = \request('Body');
-        dispatch(new SendWhatsapp($message));
-
-
-    }
-);
+Route::post('v1/callback/inbound', 'WhatsappSubscriberController@inbound');

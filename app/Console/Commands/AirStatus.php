@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\DeviceRedspira;
+use App\Subscriber;
 use Illuminate\Console\Command;
 use Symfony\Component\HttpClient\HttpClient;
 use Twilio\Rest\Client;
@@ -40,12 +42,10 @@ class AirStatus extends Command
     public function handle()
     {
         $client = HttpClient::create();
-        $response = $client->request('GET', "http://app.respira.org.mx/ws/get-monitor-data.php?idmonitor=A0034&idparam=PM25&interval=month&datetime1=2000-01-01%2000%3A00%3A00&datetime2=5000-01-01%2023%3A00%3A00&timeoffset=-7");
-        $response = json_decode($response->getContent());
 
-        $response = $response[0];
-        $val_aqi = $response->{2};
-        $status = $this->getStatus($val_aqi);
+        $device = new DeviceRedspira('A0034');
+        $val_aqi = $device->getNowCastAQI();
+
 
         $client->request('POST', env('BOT_WEBHOOK'), [
             'body' => [
