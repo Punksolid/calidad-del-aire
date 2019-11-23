@@ -2,82 +2,46 @@
 
 namespace Tests\Unit;
 
+use App\Calculations\ImecaCalculator;
 use Tests\TestCase;
-use App\Registry;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ImecasTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function user_can_see_imeca_points_from_ozono()
+
+    public function test_calcular_imeca_pm10()
     {
-        $this->withoutExceptionHandling();
-        $registry = Registry::first();
-        $call = $this->getJson("api/v1/imecas/ozono?when={$registry->when}");
+        /**
+         *  PARTÍCULAS SUSPENDIDAS FRACCIÓN RESPIRABLE (PM10)
+         * DE 0 A 120 µ/m3
+         * IMECA PM10 = CONCENTRACIÓN DE PM10 * 0.833
+         * DE 121 A 320 µ/m3
+         * IMECA PM10 = (CONCENTRACIÓN DE PM10 * 0.5) + 40
+         * MAYOR A 320 µ/m3
+         * IMECA PM10 = CONCENTRACIÓN DE PM10 * 0.625
+         * 49	µg/m³
+         */
+        $imecas_pm10 = ImecaCalculator::calculate('pm10', 75 );
+        $this->assertEquals(100, $imecas_pm10); // Funciona ejemplo twitter Medio Ambiente
 
-        $call->assertJsonStructure([
-            'data' => [
-                'ozono',
-            ],
-        ]);
+        $imecas_pm10 = ImecaCalculator::calculate('pm10', 30 );
+        $this->assertEquals(38, $imecas_pm10); // No funciona
+//
+        $imecas_pm10 = ImecaCalculator::calculate('pm10', 80 );
+        $this->assertEquals(102, $imecas_pm10); // Funciona
+        //
 
-        $call->assertJsonFragment([
-            'ozono' => 4,
-        ]);
-        $call->assertSuccessful();
+        $imecas_pm10 = ImecaCalculator::calculate('pm10', 300 );
+        $this->assertEquals(181, $imecas_pm10); // Funciona
     }
 
-    /**
-     *  @test
-     */
-    public function user_can_see_imeca_points_from_monoxido_de_carbono()
+    public function test_calculate_imeca_pm25()
     {
-        $this->withoutExceptionHandling();
+        $imecas_pm25 = ImecaCalculator::calculate('pm25', 28);
 
-        $registry = Registry::first();
-
-        $call = $this->getJson("api/v1/imecas/monoxido_de_carbono?when={$registry->when}");
-
-        $call->assertJsonStructure([
-            'data' => [
-                'monoxido_de_carbono',
-            ],
-        ]);
+        $this->assertEquals(75, $imecas_pm25, 'Imecas for pm25 are right');
     }
 
-    /**
-     * @test
-     */
-    public function user_can_see_imeca_points_from_bioxido_de_azufre()
-    {
-        $this->withoutExceptionHandling();
 
-        $registry = Registry::first();
-
-        $call = $this->getJson("api/v1/imecas/bioxido_de_azufre?when={$registry->when}");
-
-        $call->assertJsonStructure([
-            'data' => [
-                'bioxido_de_azufre',
-            ],
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function user_can_see_imeca_points_from_bioxido_de_nitrogeno()
-    {
-        $registry = Registry::first();
-
-        $call = $this->getJson("api/v1/imecas/bioxido_de_nitrogeno?when={$registry->when}");
-
-        $call->assertJsonStructure([
-            'data' => [
-                'bioxido_de_nitrogeno',
-            ],
-        ]);
-        $call->dump();
-    }
 }

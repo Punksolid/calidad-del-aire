@@ -38,19 +38,21 @@ class AirStatus extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws \Exception
      */
     public function handle()
     {
         $client = HttpClient::create();
 
         $device = new DeviceRedspira('A0034');
-        $val_aqi = $device->getNowCastAQI();
-
-
+        $val_aqi = $device->getNowCastAQI('pm10');
+        $val_imeca = $device->getLast12HoursIMECAS();
+        
         $client->request('POST', env('BOT_WEBHOOK'), [
             'body' => [
                 'value1' => $this->getMessage($val_aqi),
-                'value2' => "Puntos AQI $val_aqi"
+                'value2' => "Puntos AQI $val_aqi",
+                'value3' => "Puntos IMECA $val_imeca"
             ]
         ]);
 
