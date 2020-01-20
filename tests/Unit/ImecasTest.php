@@ -78,6 +78,5 @@ class ImecasTest extends TestCase
                 'bioxido_de_nitrogeno',
             ],
         ]);
-        $call->dump();
     }
 }
