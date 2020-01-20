@@ -134,6 +134,6 @@ class RegistryTest extends TestCase
             ]
         ]);
 
-        $call->assertSee("2019");
+        $call->assertSee(date('Y'));
     }
 }
